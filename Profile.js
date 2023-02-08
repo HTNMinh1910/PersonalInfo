@@ -1,48 +1,50 @@
 import { StatusBar } from 'expo-status-bar';
 import {StyleSheet, Text, View, Image, Modal, TextInput } from 'react-native';
 import {useState} from 'react';
-import Home from './App'
 export default function App(props) {
    const {route} = props;
    const nav = props.navigation;
-   const name = route.params.name;
-   const age = route.params.age;
-   const address = route.params.address;
-   const phone = route.params.phone;
-   const email = route.params.email;
+   const {update} = route.params;
    const [show, setShow] = useState(false);
-   const [nameEdit, setNameEdit] = useState("");
-   const [ageEdit, setAgeEdit] = useState("");
-   const [addressEdit, setAddressEdit] = useState("");
-   const [phoneEdit, setPhoneEdit] = useState("");
-   const [emailEdit, setEmailEdit] = useState("");
+   const [name, setName] = useState(route.params.name);
+   const [age, setAge] = useState(route.params.age);
+   const [address, setAddress] = useState(route.params.address);
+   const [phone, setPhone] = useState(route.params.phone);
+   const [email, setEmail] = useState(route.params.email);
 
    const ShowData = (label, value) => (label + ': ' + value);
 
    const onClose = () => {
+      setName(name);
+      setAge(age);
+      setAddress(address);
+      setPhone(phone);
+      setEmail(email);
       setShow(false);
-      setNameEdit("");
-      setAgeEdit("");
-      setAddressEdit("");
-      setPhoneEdit("");
-      setEmailEdit("");
     };
     const onclose = () => {
       onClose();
       nav.navigate("Home");
     }
     const onSave = () => {
-      name: nameEdit;
+      update(name, age, address, phone, email);
+      nav.navigate("Profile", {
+        name: name,
+        age: age,
+        address: address,
+        phone: phone,
+        email: email, 
+      });
 
       return onClose();
     };
     const onEdit = () => {
       setShow(true);
-      setNameEdit(name);
-      setAgeEdit(age);
-      setAddressEdit(address);   
-      setPhoneEdit(phone);   
-      setEmailEdit(email);   
+      setName(name);
+      setAge(age);
+      setAddress(address);   
+      setPhone(phone);   
+      setEmail(email);   
     };
   return (
     <View style={styles.container}>
@@ -50,11 +52,11 @@ export default function App(props) {
       {show ? null:<Text style={styles.button} onPress={() => onEdit()}>Edit</Text>}
         <Modal visible={show} animationType={"slide"}>
           <View style={{alignSelf: "center", marginTop: 150}}>
-          <TextInput placeholder="Name" onChangeText={(text) => setNameEdit(text)} value={nameEdit} style={styles.input}/>
-          <TextInput placeholder="Age" onChangeText={(text) => setAgeEdit(text)} value={ageEdit} style={styles.input}/>
-          <TextInput placeholder="Address" onChangeText={(text) => setAddressEdit(text)} value={addressEdit} style={styles.input}/>
-          <TextInput placeholder="Phone" onChangeText={(text) => setPhoneEdit(text)} value={phoneEdit} style={styles.input}/>
-          <TextInput placeholder="Email" onChangeText={(text) => setEmailEdit(text)} value={emailEdit} style={styles.input}/>
+          <TextInput placeholder="Name" onChangeText={(text) => setName(text)} value={name} style={styles.input}/>
+          <TextInput placeholder="Age" onChangeText={(text) => setAge(text)} value={age} style={styles.input}/>
+          <TextInput placeholder="Address" onChangeText={(text) => setAddress(text)} value={address} style={styles.input}/>
+          <TextInput placeholder="Phone" onChangeText={(text) => setPhone(text)} value={phone} style={styles.input}/>
+          <TextInput placeholder="Email" onChangeText={(text) => setEmail(text)} value={email} style={styles.input}/>
           <View style={{margin: 10, flexDirection: "row", justifyContent: "space-around", width: "100%"}}>
             <Text style={styles.btnDialog} title="Cancel" onPress={() => onclose()}>Cancel</Text>
             <Text style={styles.btnDialog} title="Save" onPress={() => onSave()}>Save</Text>
